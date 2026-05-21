@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 
-const client = new OpenAI({
-  apiKey: process.env.MIMO_API_KEY || "",
-  baseURL: "https://api.xiaomimimo.com/v1",
-});
-
 export async function POST(req: NextRequest) {
+  const client = new OpenAI({
+    apiKey: process.env.MIMO_API_KEY || "",
+    baseURL: "https://api.xiaomimimo.com/v1",
+  });
   try {
     const { code, language } = await req.json();
 
