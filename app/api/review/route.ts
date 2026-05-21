@@ -2,17 +2,22 @@ import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 
 export async function POST(req: NextRequest) {
+  const { code, language, apiKey } = await req.json();
+
+  if (!apiKey || apiKey.trim().length === 0) {
+    return NextResponse.json({ error: "MiMo API key is required" }, { status: 401 });
+  }
+
+  if (!code || code.trim().length === 0) {
+    return NextResponse.json({ error: "No code provided" }, { status: 400 });
+  }
+
   const client = new OpenAI({
-    apiKey: process.env.MIMO_API_KEY || "",
+    apiKey: apiKey.trim(),
     baseURL: "https://api.xiaomimimo.com/v1",
   });
+
   try {
-    const { code, language } = await req.json();
-
-    if (!code || code.trim().length === 0) {
-      return NextResponse.json({ error: "No code provided" }, { status: 400 });
-    }
-
     const prompt = `You are an expert code reviewer. Review the following ${language || "code"} and provide structured feedback.
 
 Return your review in this exact JSON format:
@@ -40,18 +45,15 @@ Return only valid JSON, no markdown, no extra text.`;
 
     const content = response.choices[0]?.message?.content || "{}";
 
-    // Parse JSON response
     let review;
     try {
       review = JSON.parse(content);
     } catch {
-      // If not valid JSON, return raw
       review = { summary: content, score: null, bugs: [], improvements: [], security: [], positives: [] };
     }
 
     return NextResponse.json({ review });
   } catch (error: unknown) {
-    console.error("Review error:", error);
     const message = error instanceof Error ? error.message : "Failed to review code";
     return NextResponse.json({ error: message }, { status: 500 });
   }

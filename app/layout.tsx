@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CodeReview AI — Powered by MiMo-V2.5-Pro",
-  description: "AI-powered code reviewer that detects bugs, security issues, and suggests improvements using Xiaomi MiMo-V2.5-Pro reasoning model.",
+  title: "Lintai — AI Code Review powered by MiMo-V2.5-Pro",
+  description: "AI-powered code reviewer that detects bugs, security issues, and suggests improvements. Bring your own MiMo API key.",
   keywords: ["code review", "AI", "MiMo", "Xiaomi", "static analysis", "bug detection"],
 };
 
