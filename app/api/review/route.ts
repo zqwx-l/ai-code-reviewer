@@ -38,7 +38,7 @@ ${code}
 Return only valid JSON, no markdown, no extra text.`;
 
     const response = await client.chat.completions.create({
-      model: "MiMo-V2.5-Pro",
+      model: "mimo-v2.5-pro",
       messages: [{ role: "user", content: prompt }],
       temperature: 0.3,
     });
