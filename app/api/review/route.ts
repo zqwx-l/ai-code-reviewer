@@ -47,7 +47,9 @@ Return only valid JSON, no markdown, no extra text.`;
 
     let review;
     try {
-      review = JSON.parse(content);
+      // Strip markdown code blocks if model wraps response
+      const cleaned = content.replace(/^```(?:json)?\n?/m, "").replace(/\n?```$/m, "").trim();
+      review = JSON.parse(cleaned);
     } catch {
       review = { summary: content, score: null, bugs: [], improvements: [], security: [], positives: [] };
     }
