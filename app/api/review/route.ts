@@ -47,8 +47,9 @@ Return only valid JSON, no markdown, no extra text.`;
 
     let review;
     try {
-      // Strip markdown code blocks if model wraps response
-      const cleaned = content.replace(/^```(?:json)?\n?/m, "").replace(/\n?```$/m, "").trim();
+      // Extract JSON object directly — handles markdown code block wrapping
+      const jsonMatch = content.match(/\{[\s\S]*\}/);
+      const cleaned = jsonMatch ? jsonMatch[0] : content;
       review = JSON.parse(cleaned);
     } catch {
       review = { summary: content, score: null, bugs: [], improvements: [], security: [], positives: [] };
